@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    connect(&robot, SIGNAL(updateUI(QByteArray)), this, SLOT(updateWindow(QByteArray data)));
 
 }
 
@@ -16,16 +16,20 @@ MainWindow::~MainWindow()
 {
     delete ui;
     robot.disconnect();
+
 }
 
 void MainWindow::initialise()
 {
     robot.doConnect();
-    connect(&robot, SIGNAL(updateUI(const QByteArray)),this,SLOT(on_Batterie_valueChanged(const QByteArray)));
+    /*connect(&robot, SIGNAL(updateUI(QByteArray)), this, SLOT(on_Battery_valueChanged()));*/
+
 }
 
+void MainWindow::updateWindow(QByteArray data) {
+    on_Batterie_valueChanged(data);
 
-
+}
 void MainWindow::on_pushButton_clicked()
 {
     robot.MoveForward();
@@ -34,7 +38,9 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
+    qDebug()<<"Droite";
     robot.TurnRight();
+
 }
 
 
@@ -43,6 +49,7 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::on_pushButton_4_clicked()
 {
     robot.TurnLeft();
+
 }
 
 
@@ -51,11 +58,13 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_pushButton_3_clicked()
 {
     robot.MoveBackward();
+
 }
 
 
-void MainWindow::on_Batterie_valueChanged(int value)
+void MainWindow::on_Batterie_valueChanged(QByteArray data)
 {
-    ui->Batterie->setValue(robot.DataReceived[2]);
+   unsigned char battery = (unsigned char)data[2];
+    ui->Batterie->setValue(battery);
 }
 

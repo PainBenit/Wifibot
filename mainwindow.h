@@ -30,7 +30,9 @@ private slots:
 
     void on_pushButton_3_clicked();
 
-    void on_Batterie_valueChanged(int value);
+    void on_Batterie_valueChanged(QByteArray data);
+
+    void updateWindow(QByteArray data);
 
 private:
     Ui::MainWindow *ui;
