@@ -30,7 +30,8 @@ public slots:
     void TurnRight();
     void TurnLeft();
     void MoveBackward();
-    int ShowBattery();
+    void Stop();
+
     short Crc16();
 
 private:

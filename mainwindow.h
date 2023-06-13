@@ -22,13 +22,13 @@ public:
     void initialise();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_Haut_clicked();
 
-    void on_pushButton_2_clicked();
+    void on_Droite_clicked();
 
-    void on_pushButton_4_clicked();
+    void on_Gauche_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_Bas_clicked();
 
     void on_Batterie_valueChanged(QByteArray data);
 
@@ -36,7 +36,13 @@ private slots:
 
     void updateSpeed(QByteArray data);
 
-    void updateIR(QByteArray data);
+    unsigned char* updateIR(QByteArray data);
+
+    void on_Connexion_clicked();
+
+    void on_Deconnexion_clicked();
+
+    void on_Stop_clicked();
 
 private:
     Ui::MainWindow *ui;

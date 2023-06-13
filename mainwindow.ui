@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="Haut">
     <property name="geometry">
      <rect>
       <x>330</x>
@@ -24,10 +24,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Haut</string>
+    </property>
+    <property name="shortcut">
+     <string>Up</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="Droite">
     <property name="geometry">
      <rect>
       <x>610</x>
@@ -37,23 +40,29 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Droite</string>
+    </property>
+    <property name="shortcut">
+     <string>Right</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="Bas">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>320</y>
+      <x>340</x>
+      <y>340</y>
       <width>80</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Bas</string>
+    </property>
+    <property name="shortcut">
+     <string>Down</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="Gauche">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -63,7 +72,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Gauche</string>
+    </property>
+    <property name="shortcut">
+     <string>Left</string>
     </property>
    </widget>
    <widget class="QProgressBar" name="Batterie">
@@ -80,6 +92,85 @@
     </property>
     <property name="value">
      <number>24</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Connexion">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Connexion</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Deconnexion">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>20</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Deconnexion</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="L1">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>120</y>
+      <width>64</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Stop">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>200</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="R1">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>110</y>
+      <width>64</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="R2">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>300</y>
+      <width>64</width>
+      <height>23</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="L2">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>280</y>
+      <width>64</width>
+      <height>23</height>
+     </rect>
     </property>
    </widget>
   </widget>
