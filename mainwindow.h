@@ -34,6 +34,10 @@ private slots:
 
     void updateWindow(QByteArray data);
 
+    void updateSpeed(QByteArray data);
+
+    void updateIR(QByteArray data);
+
 private:
     Ui::MainWindow *ui;
     MyRobot robot;
