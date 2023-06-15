@@ -45,6 +45,8 @@ private slots:
 
     void on_Stop_clicked();
 
+    void on_plainTextEdit_textChanged();
+
 private:
     Ui::MainWindow *ui;
     MyRobot robot;
