@@ -16,7 +16,6 @@ MyRobot::MyRobot(QObject *parent) : QObject(parent) {
     DataToSend[8] = 0x0;
     DataReceived.resize(21);
     TimerEnvoi = new QTimer();
-    // setup signal and slot
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot())); //Send data to wifibot timer
 }
 
@@ -32,8 +31,7 @@ void MyRobot::doConnect() {
 
     //socket->connectToHost("192.168.10.1", 5001); //connection au simulateur port a changer
 
-    socket->connectToHost("192.168.1.106", 15020);// connection to wifibot
-    // we need to wait...
+    socket->connectToHost("192.168.1.106", 15020);// connection au wifibot
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
         return;
@@ -72,8 +70,12 @@ void MyRobot::MyTimerSlot() {
     Mutex.unlock();
 }
 
-void MyRobot::MoveForward() {
-
+void MyRobot::MoveForward()
+{
+    //On envoie les instructions pour que le robot avance le 1er octet est toujours 255 et le 2eme est la taille du message
+    //Les 2 suivant servent a definir la vitesse des roues gauches et les 2 encore suivant servent a definir la vitesse des roues droites
+    //Le 7eme octet sert a definir le sens des roues
+    //Les octets 8 et 9 servent au CRC
     DataToSend[0] = 255;
     DataToSend[1] = 0x07;
     DataToSend[2] = 120;

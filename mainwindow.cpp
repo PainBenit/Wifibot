@@ -1,345 +1,135 @@
+
 #include "mainwindow.h"
-#include "wifibot.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    ui->setupUi((QMainWindow *)this);
-    Camera = new QNetworkAccessManager();
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    //On fait en sorte que lorsqu'on recoit des donnees du robot on mette a jour la fenetre d'affichage
+    connect(&robot, SIGNAL(updateUI(QByteArray)), this, SLOT(updateWindow(QByteArray)));
 }
-
-void MainWindow::updateInfos(dataInType* dataL, dataInType* dataR){
-    updateBatteryLevel();
-    updateSpeedLabel();
-    updateIRSensorLabel();
-    updateCurrentLabel();
-    updateOdomeryLabel();
-
-}
-
-void MainWindow::updateBatteryLevel(){
-    QString danger = "QProgressBar::chunk {background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #FF0350,stop: 0.4999 #FF0020,stop: 0.5 #FF0019,stop: 1 #FF0000 );border-bottom-right-radius: 5px;border-bottom-left-radius: 5px;border: .px solid black;}";
-    QString safe= "QProgressBar::chunk {background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0,stop: 0 #78d,stop: 0.4999 #46a,stop: 0.5 #45a,stop: 1 #238 );border-bottom-right-radius: 7px;border-bottom-left-radius: 7px;border: 1px solid black;}";
-
-    ui->progressBar->setValue( robot->dataL->BatLevel*0.1*100/12.7);
-
-        if (ui->progressBar->value() < 25)
-             ui->progressBar->setStyleSheet(danger);
-        else {
-             ui->progressBar->setStyleSheet(safe);
-    }
-
-
-}
-
-void MainWindow::updateSendTest(){
-    updateSentLabel("Bonjour");
-}
-void MainWindow::updateSpeedLabel(){
-
-
-    //Changing QLCDNumber speedLeft color
-    int speedL = robot->dataL->SpeedFront/100;
-    ui->speedLeft->display(speedL);
-        if (speedL >70 && speedL <100){
-
-             ui->speedLeft->setStyleSheet("background-color: yellow;  color: white;");
-
-        }else if(speedL >100){
-
-             ui->speedLeft->setStyleSheet("background-color: red; color: white;");
-        }else {
-
-             ui->speedLeft->setStyleSheet("background-color: black; color: white;");
-        }
-
-    //Change QLCDNumber speedRight color
-     int speedR = robot->dataR->SpeedFront/100;
-    ui->speedRight->display(speedR);
-        if (speedR > 70 && speedR < 100){
-
-             ui->speedRight->setStyleSheet("background-color: orange; color: white;");
-
-        }else if(speedR >100){
-
-             ui->speedRight->setStyleSheet("background-color: orange; color: white;");
-        }else {
-
-             ui->speedRight->setStyleSheet("background-color: black; color: white;");
-        }
-}
-
-void MainWindow::updateIRSensorLabel(){
-
-
-     //IR1 sensor left side
-     int IR1L =robot->dataL->IR*3.3/255;
-    ui->IRS1Left->display(IR1L);
-
-            if (IR1L >=1){
-
-                 ui->IRS1Left->setStyleSheet("background-color: red; color: white;");
-
-            }else {
-
-                 ui->IRS1Left->setStyleSheet("background-color: black; color: white;");
-            }
-    //IR1 sensor Right side
-        int IR1R = robot->dataL->IR*3.3/255;
-        ui->IRS1Right->display(IR1R);
-            if (IR1R >=1 ){
-
-                 ui->IRS1Right->setStyleSheet("background-color: red; color: white;");
-
-            }else {
-
-                 ui->IRS1Right->setStyleSheet("background-color: black; color: white;");
-            }
-
-   //IR2 sensor left side
-        int IR2L = robot->dataL->IR2*3.3/255;
-
-      ui->IRS2Left->display(IR2L);
-        if (IR2L >= 1 ){
-
-             ui->IRS2Left->setStyleSheet("background-color: red; color: white;");
-        }else {
-
-             ui->IRS2Left->setStyleSheet("background-color: black; color: white;");
-        }
-
-
-    //IR2 sensor left side
-    int IR2R= robot->dataR->IR2*3.3/255;
-
-    ui->IRS2Right->display(IR2R);
-        if (IR2R>=1){
-
-             ui->IRS2Right->setStyleSheet("background-color: red; color: white;");
-        }else {
-
-             ui->IRS2Right->setStyleSheet("background-color: black; color: white;");
-        }
-
-}
-
-void MainWindow::updateOdomeryLabel(){
-
-    int odometryL=robot->dataL->odometry/400;
-    ui->odometryLeft->display(odometryL);
-        if (odometryL >100){
-
-             ui->odometryLeft->setStyleSheet("background-color: red; color: white;");
-
-        }else {
-
-             ui->odometryLeft->setStyleSheet("background-color: black; color: white;");
-        }
-
-
-        int odometryR=robot->dataR->odometry/400;
-
-        ui->odometryRight->display(odometryR);
-
-            if ( odometryR >100){
-
-                 ui->odometryRight->setStyleSheet("background-color: red; color: white;");
-            }else {
-
-                 ui->odometryRight->setStyleSheet("background-color: black; color: white;");
-            }
-
-}
-
-
-void MainWindow::updateCurrentLabel(){
-
- //   to do
-            //change the control based on value to control baset on sensors !!!!!!!!!!!!!!!!!!!!!!!!!
-    int currentL =robot->dataL->Current/10;
-    ui->CurrentLeft->display(currentL);
-
-        if (currentL > 1 && currentL <5){
-
-             ui->CurrentLeft->setStyleSheet("background-color: orange; color: white;");
-
-        }else if(currentL > 5 ){
-
-             ui->CurrentLeft->setStyleSheet("background-color: red; color: white;");
-        }else {
-
-             ui->CurrentLeft->setStyleSheet("background-color: black; color: white;");
-        }
-
-    double currentR= robot->dataR->Current/10;
-    ui->CurrentRight->display(currentR);
-
-      if (currentR >1 && currentR < 5){
-
-        ui->CurrentRight->setStyleSheet("background-color: orange; color: white;");
-
-      }else if(currentR >5){
-
-         ui->CurrentRight->setStyleSheet("background-color: red; color: white;");
-    }else {
-
-         ui->CurrentRight->setStyleSheet("background-color: black; color: white;");
-    }
-
-}
-
-void MainWindow::updateReceivedTest(){
-    updateReceivedLabel("Bonjour reçu");
-}
-void MainWindow::updateSentTrame(QByteArray* sentData){
-    QString bytesText = QString::fromStdString(sentData->toStdString()) ;
-    updateSentLabel(bytesText);
-    qDebug() << bytesText;
-}
-void MainWindow::updateReceivedTrame(QByteArray* receivedData){
-    QString bytesText = QString::fromStdString(receivedData->toStdString());
-    updateReceivedLabel(bytesText);
-    qDebug() << bytesText;
-}
-
-
-void MainWindow::updateSentLabel(QString newText){
-    //ui->sent->setText(newText);
-}
-void MainWindow::updateReceivedLabel(QString newText){
-    //ui->received->setText(newText);
-}
-
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    robot.disconnect();
 }
 
-void MainWindow::on_upBoutton_clicked()
+void MainWindow::initialise()
 {
-    qDebug() << "Move forward";
-    robot->moveForward();
+    robot.doConnect();
 }
 
+void MainWindow::updateWindow(QByteArray data) {
+    on_Batterie_valueChanged(data);
+    updateIR(data);
+    updateSpeed(data);
+}
 
-void MainWindow::on_rightBoutton_clicked()
+void MainWindow::on_Haut_clicked()
 {
-    robot->moveRight();
-}
-
-void MainWindow::on_LeftBoutton_clicked()
-{
-    robot->moveLeft();
-}
-
-void MainWindow::on_connectBoutton_clicked()
-{
-    robot->doConnect(ui->ipAddressEdit->text(),15020);
-}
-
-void MainWindow::on_disconnectBoutton_clicked()
-{
-    robot->disConnect();
-}
-
-void MainWindow::on_downBouton_clicked()
-{
-    robot->moveBack();
-}
-
-void MainWindow::on_speedSlider_valueChanged(int value)
-{
-    robot->setSpeed(value);
-}
-
-
-void MainWindow::on_pushButton5_clicked(){
-    this->Camera->get(QNetworkRequest(QUrl("http://"+ui->ipAddressEdit->text()+":8080/?action=command&dest=0&plugin=0&id=10094853&group=1&value=-200")));
-}
-
-void MainWindow::on_pushButton4_clicked(){
-    this->Camera->get(QNetworkRequest(QUrl("http://"+ui->ipAddressEdit->text()+":8080/?action=command&dest=0&plugin=0&id=10094853&group=1&value=200")));
-}
-
-void MainWindow::on_pushButton2_clicked(){
-    this->Camera->get(QNetworkRequest(QUrl("http://"+ui->ipAddressEdit->text()+":8080/?action=command&dest=0&plugin=0&id=10094852&group=1&value=200")));
-}
-void MainWindow::on_pushButton3_clicked(){
-    this->Camera->get(QNetworkRequest(QUrl("http://"+ui->ipAddressEdit->text()+":8080/?action=command&dest=0&plugin=0&id=10094852&group=1&value=-200")));
-}
-
-void MainWindow::video(){
-    this->view = new QWebEngineView();
-    //this->view->setLayout(ui->vLayout);
-    this->view->load(QUrl("http://"+ui->ipAddressEdit->text()+":8080/?action=stream"));
-    this->view->show();
-    this->Camera->get(QNetworkRequest(QUrl("http://192.168.1.11:8080/?action=command&dest=0&plugin=0&id=10094855&group=1&value=1")));
-    this->view->show();
-}
-
-void MainWindow::screenshot(){
-    QPixmap capt =QPixmap();
-    capt = QPixmap::grabWidget(this->view);
-    QString format = "png";
-    QString initialPath = QDir::currentPath() + tr("/sans_nom.") + format;
-
-        QString name = QFileDialog::getSaveFileName((QWidget*)this, tr("Save As"),
-                                   initialPath,
-                                   tr("%1 Files (*.%2);;All Files (*)")
-                                   .arg(format.toUpper())
-                                   .arg(format));
-        if (!name.isEmpty()){
-            capt.save(name, format.toUtf8());
-        }
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event){
-    if( event->key() == Qt::Key_Z){
-        on_upBoutton_clicked();
+    //On regarde si il y a un obstable devant le robot si oui on le stop sinon on le laisse avancer
+    unsigned char* tabIR = updateIR(robot.DataReceived);
+    if(tabIR[0]>180 || tabIR[2]>180)
+    {
+        robot.Stop();
     }
-    if( event->key() == Qt::Key_Q){
-        on_LeftBoutton_clicked();
-    }
-    if( event->key() == Qt::Key_D){
-        on_rightBoutton_clicked();
-    }
-    if( event->key() == Qt::Key_S){
-        on_downBouton_clicked();
-    }
-    if( event->key() == Qt::Key_O){
-        on_pushButton5_clicked();
-    }
-    if( event->key() == Qt::Key_K){
-        on_pushButton2_clicked();
-    }
-    if( event->key() == Qt::Key_L){
-        on_pushButton4_clicked();
-    }
-    if( event->key() == Qt::Key_M){
-        on_pushButton3_clicked();
-    }
-    if( event->key() == Qt::Key_X){
-        video();
-    }
-    if( event->key() == Qt::Key_C){
-        screenshot();
+    else
+    {
+        robot.MoveForward();
     }
 }
 
 
-
-
-void MainWindow::on_screenShotBouton_clicked()
+void MainWindow::on_Droite_clicked()
 {
-    screenshot();
+    robot.TurnRight();
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_Gauche_clicked()
 {
-    ui->speedSlider->setValue(0);
+    robot.TurnLeft();
 }
 
-void MainWindow::on_radioButton_clicked()
+void MainWindow::on_Bas_clicked()
 {
-    video();
+    //On regarde si il y a un obstable derriere le robot si oui on le stop sinon on le laisse reculer
+    unsigned char* tabIR = updateIR(robot.DataReceived);
+    if(tabIR[1]>180 || tabIR[3]>180)
+    {
+        robot.Stop();
+    }
+    else
+    {
+         robot.MoveBackward();
+    }
+}
+
+void MainWindow::on_Batterie_valueChanged(QByteArray data)
+{
+    //on recupere la partie des donnee envoye par le robot correspondant a la batterie
+    //ce que l'on recoie varie entre 0 et 255 on convertie cela en pourcentage avant de l'afficher
+    unsigned char a = (unsigned char)data[2];
+    float curBat = float(a)/255*100;
+    ui->Batterie->setValue(curBat);
+}
+
+
+void MainWindow::updateSpeed(QByteArray data)
+{
+    long odometryL = ((long)data[8]<<24)+((long)data[7]<<16)+((long)data[6]<<8)+((long)data[5]);
+    long odometryR = ((long)data[16]<<24)+((long)data[15]<<16)+((long)data[14]<<8)+((long)data[13]);
+}
+
+unsigned char* MainWindow::updateIR(QByteArray data)
+{
+    //On recupere les donnees correspondant aux 4 capteurs Infra-Rouge
+    unsigned char IRL1 = (unsigned char)data[3];
+    unsigned char IRL2 = (unsigned char)data[4];
+    unsigned char IRR1 = (unsigned char)data[11];
+    unsigned char IRR2 = (unsigned char)data[12];
+
+    unsigned char tabIR[4];
+    tabIR[0] = IRL1;
+    tabIR[1] = IRL2;
+    tabIR[2] = IRR1;
+    tabIR[3] = IRR2;
+
+    if(tabIR[0]>180 || tabIR[1]>180 || tabIR[2]>180 || tabIR[3]>180 )
+    {
+         robot.Stop();
+    }
+    //On recoie des valeurs comprises entre 30 et 180 ce qui correspont a des distances comprises entre 1m50cm et 20cm Donc on a tente de faire une conversion mais ca n'a pas marche a cause du fait que les valeurs ne soit pas lineair
+    float pas = 130/150;
+    float dIRL1 = 20 + float(IRL1)*pas;
+    float dIRL2 = 20 + float(IRL2)*pas;
+    float dIRR1 = 20 + float(IRR1)*pas;
+    float dIRR2 = 20 + float(IRR2)*pas;
+
+    ui->L1->display(dIRL1);
+    ui->L2->display(dIRL2);
+    ui->R1->display(dIRR1);
+    ui->R2->display(dIRR2);
+
+    return tabIR;
+}
+
+void MainWindow::on_Connexion_clicked()
+{
+    robot.doConnect();
+}
+
+
+void MainWindow::on_Deconnexion_clicked()
+{
+    robot.disConnect();
+}
+
+
+void MainWindow::on_Stop_clicked()
+{
+    robot.Stop();
 }
