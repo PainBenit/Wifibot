@@ -24,6 +24,7 @@ void MainWindow::initialise()
     robot.doConnect();
 
 
+
 }
 
 void MainWindow::updateWindow(QByteArray data) {
@@ -71,7 +72,7 @@ void MainWindow::on_Gauche_clicked()
 void MainWindow::on_Bas_clicked()
 {
     unsigned char* tabIR = updateIR(robot.DataReceived);
-    if(tabIR[1]>180 || tabIR[3]>180)
+    if(tabIR[1]>180 /*|| tabIR[3]>180*/)
     {
         robot.Stop();
     }
@@ -100,8 +101,22 @@ void MainWindow::on_Batterie_valueChanged(QByteArray data)
 
 void MainWindow::updateSpeed(QByteArray data)
 {
+
+    float diametre = 0.135;
     long odometryL = ((long)data[8]<<24)+((long)data[7]<<16)+((long)data[6]<<8)+((long)data[5]);
     long odometryR = ((long)data[16]<<24)+((long)data[15]<<16)+((long)data[14]<<8)+((long)data[13]);
+
+    // Affichage après une conversion
+    ui->OdometryLeft->setText(QString::number(odometryL));
+    ui->OdometryRight->setText(QString::number(odometryR));
+
+    int SpeedL=(int)((data[1] << 8) + data[0]);
+    int SpeedR=(int)((data[10] << 8) + data[9]);
+
+    ui->SpeedL->display(SpeedL);
+    ui->SpeedR->display(SpeedR);
+
+
 
 
 }
@@ -119,22 +134,22 @@ unsigned char* MainWindow::updateIR(QByteArray data)
     tabIR[2] = IRR1;
     tabIR[3] = IRR2;
 
-    if(tabIR[0]>180 || tabIR[1]>180 || tabIR[2]>180 || tabIR[3]>180 )
+    if(tabIR[0]>180 || tabIR[1]>180 || tabIR[2]>180 /*|| tabIR[3]>180*/ )
     {
          robot.Stop();
     }
 
 
-       float pas = 130/150;
-       float dIRL1 = 20 + float(IRL1)*pas;
+       /*float pas = 130/150;
+        float dIRL1 = 20 + 130-(float(IRL1)*pas);
        float dIRL2 = 20 + float(IRL2)*pas;
        float dIRR1 = 20 + float(IRR1)*pas;
-       float dIRR2 = 20 + float(IRR2)*pas;
+       float dIRR2 = 20 + float(IRR2)*pas;*/
 
-       ui->L1->display(dIRL1);
-       ui->L2->display(dIRL2);
-       ui->R1->display(dIRR1);
-       ui->R2->display(dIRR2);
+       ui->L1->display(IRL1);
+       ui->L2->display(IRL2);
+       ui->R1->display(IRR1);
+       ui->R2->display(IRR2);
 
     return tabIR;
 
