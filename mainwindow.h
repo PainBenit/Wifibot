@@ -1,54 +1,74 @@
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "wifibot.h"
+
 #include <QMainWindow>
-#include "myrobot.h"
 
-
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
-
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void updateSentLabel(QString newText);
+    void updateReceivedLabel(QString newText);
+    Wifibot *robot;
+    QNetworkAccessManager *Camera;
+    QWebEngineView  *view;
+    void video();
+    void screenshot();
+    void keyPressEvent(QKeyEvent *event);
 
-    void initialise();
 
+    void updateBatteryLevel();
+    void updateIRSensorLabel();
+    void updateSpeedLabel();
+    void updateCurrentLabel();
+    void updateOdomeryLabel();
+public slots:
+    void updateSendTest();
+    void updateReceivedTest();
+    void updateSentTrame(QByteArray *sentData);
+    void updateReceivedTrame(QByteArray *receivedData);
+
+    void updateInfos(dataInType* dataL, dataInType* dataR);
 private slots:
-    void on_Haut_clicked();
+    void on_upBoutton_clicked();
 
-    void on_Droite_clicked();
+    void on_rightBoutton_clicked();
 
-    void on_Gauche_clicked();
+    void on_LeftBoutton_clicked();
 
-    void on_Bas_clicked();
+    void on_connectBoutton_clicked();
 
-    void on_Batterie_valueChanged(QByteArray data);
+    void on_disconnectBoutton_clicked();
 
-    void updateWindow(QByteArray data);
+    void on_downBouton_clicked();
 
-    void updateSpeed(QByteArray data);
+    void on_speedSlider_valueChanged(int value);
 
-    unsigned char* updateIR(QByteArray data);
+    void on_pushButton3_clicked();
 
-    void on_Connexion_clicked();
+    void on_pushButton2_clicked();
 
-    void on_Deconnexion_clicked();
+    void on_pushButton4_clicked();
 
-    void on_Stop_clicked();
+    void on_pushButton5_clicked();
+
+    void on_screenShotBouton_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_radioButton_clicked();
 
 private:
     Ui::MainWindow *ui;
-    MyRobot robot;
-
 };
 
 #endif // MAINWINDOW_H
