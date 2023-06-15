@@ -31,7 +31,6 @@ public slots:
     void TurnLeft();
     void MoveBackward();
     void Stop();
-
     short Crc16();
 
 private:

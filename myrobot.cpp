@@ -29,7 +29,9 @@ void MyRobot::doConnect() {
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
+
     //socket->connectToHost("192.168.10.1", 5001); //connection au simulateur port a changer
+
     socket->connectToHost("192.168.1.106", 15020);// connection to wifibot
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
@@ -61,7 +63,6 @@ void MyRobot::readyRead() {
     qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
-
 }
 
 void MyRobot::MyTimerSlot() {
@@ -132,6 +133,7 @@ void MyRobot::MoveBackward() {
     DataReceived.resize(21);
 }
 
+
 void MyRobot::Stop() {
 
     DataToSend[0] = 255;
@@ -146,6 +148,7 @@ void MyRobot::Stop() {
     DataToSend[8] = (crc >> 8) & 0xff;
     DataReceived.resize(21);
 }
+
 
 
 short MyRobot::Crc16()
@@ -169,10 +172,4 @@ short MyRobot::Crc16()
     }
    return(Crc);
 }
-
-
-
-
-
-
 
