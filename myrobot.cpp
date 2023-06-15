@@ -29,7 +29,9 @@ void MyRobot::doConnect() {
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
-    //socket->connectToHost("192.168.10.1", 5007); //connection au simulateur port a changer
+
+    //socket->connectToHost("192.168.10.1", 5001); //connection au simulateur port a changer
+
     socket->connectToHost("192.168.1.106", 15020);// connection to wifibot
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
@@ -61,7 +63,6 @@ void MyRobot::readyRead() {
     qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
-    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
 }
 
 void MyRobot::MyTimerSlot() {
@@ -132,9 +133,23 @@ void MyRobot::MoveBackward() {
     DataReceived.resize(21);
 }
 
-int MyRobot::ShowBattery(){
-    return 4;
+
+void MyRobot::Stop() {
+
+    DataToSend[0] = 255;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = 0;
+    DataToSend[3] = 0;
+    DataToSend[4] = 0;
+    DataToSend[5] = 0;
+    DataToSend[6] = 0;
+    short crc = Crc16();
+    DataToSend[7] = crc & 0xff;
+    DataToSend[8] = (crc >> 8) & 0xff;
+    DataReceived.resize(21);
 }
+
+
 
 short MyRobot::Crc16()
 {  unsigned int Crc = 0xFFFF;
@@ -157,28 +172,4 @@ short MyRobot::Crc16()
     }
    return(Crc);
 }
-
-/*short Crc16(unsigned char *Adresse_tab , unsigned char Taille_max)
-{  unsigned int Crc = 0xFFFF;
-    unsigned int Polynome = 0xA001;
-    unsigned int CptOctet = 0;
-    unsigned int CptBit = 0;
-    unsigned int Parity= 0;
-
-    Crc = 0xFFFF;
-    Polynome = 0xA001;
-    for ( CptOctet= 0 ; CptOctet < Taille_max ; CptOctet++)
-    {
-        Crc ^= *( Adresse_tab + CptOctet);
-
-        for ( CptBit = 0; CptBit <= 7 ; CptBit++)
-        {
-            Parity= Crc;
-            Crc >>= 1;
-            if (Parity%2 == true)
-                Crc ^= Polynome;
-        }
-    }
-   return(Crc);
-}*/
 
