@@ -8,7 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     connect(&robot, SIGNAL(updateUI(QByteArray)), this, SLOT(updateWindow(QByteArray)));
+
 
 }
 
@@ -16,6 +18,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     robot.disconnect();
+
 
 }
 
@@ -54,7 +57,9 @@ void MainWindow::on_Droite_clicked()
 
     robot.TurnRight();
 
+
 }
+
 
 
 
@@ -161,5 +166,16 @@ void MainWindow::on_Deconnexion_clicked()
 void MainWindow::on_Stop_clicked()
 {
     robot.Stop();
+=======
+void MainWindow::on_pushButton_4_clicked()
+{
+    robot.TurnLeft();
 }
+
+
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    robot.MoveBackward();
 

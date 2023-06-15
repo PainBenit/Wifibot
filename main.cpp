@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
 
 
     w.show();
+
     w.initialise();
+
     return a.exec();
 }

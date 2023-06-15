@@ -14,7 +14,9 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+
    <widget class="QPushButton" name="Haut">
+
     <property name="geometry">
      <rect>
       <x>330</x>
@@ -24,6 +26,7 @@
      </rect>
     </property>
     <property name="text">
+
      <string>Haut</string>
     </property>
     <property name="shortcut">
@@ -31,6 +34,7 @@
     </property>
    </widget>
    <widget class="QPushButton" name="Droite">
+
     <property name="geometry">
      <rect>
       <x>610</x>
@@ -40,6 +44,7 @@
      </rect>
     </property>
     <property name="text">
+
      <string>Droite</string>
     </property>
     <property name="shortcut">
@@ -51,11 +56,13 @@
      <rect>
       <x>340</x>
       <y>340</y>
+
       <width>80</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
+
      <string>Bas</string>
     </property>
     <property name="shortcut">
@@ -63,6 +70,7 @@
     </property>
    </widget>
    <widget class="QPushButton" name="Gauche">
+
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -72,6 +80,7 @@
      </rect>
     </property>
     <property name="text">
+
      <string>Gauche</string>
     </property>
     <property name="shortcut">
@@ -171,6 +180,7 @@
       <width>64</width>
       <height>23</height>
      </rect>
+
     </property>
    </widget>
   </widget>
@@ -180,7 +190,9 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
+
      <height>22</height>
+
     </rect>
    </property>
   </widget>
